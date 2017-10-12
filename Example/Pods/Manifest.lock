@@ -1,0 +1,27 @@
+PODS:
+  - Droar (1.0.1):
+    - SDVersion
+  - netfox (1.9)
+  - netfox-Droar (1.0.0):
+    - Droar
+    - netfox
+  - SDVersion (4.3.1)
+
+DEPENDENCIES:
+  - Droar
+  - netfox
+  - netfox-Droar (from `../`)
+
+EXTERNAL SOURCES:
+  netfox-Droar:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Droar: 91d15f286273fe2eedc1d1dcaa6a6a424b144d5e
+  netfox: 739be3221432cfc365b0bd91633be4409e2a699f
+  netfox-Droar: bb4bf9bdce9812883d123a0f9806bde28db6fb81
+  SDVersion: f89668d817ccfee16a57fc279030635bd2ad8fae
+
+PODFILE CHECKSUM: de3d4a8e7b4da6d7146318d88b07f5e326cb85d8
+
+COCOAPODS: 1.3.1
