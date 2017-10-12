@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'netfox-Droar_Example' do
+  pod 'netfox-Droar', :path => '../'
+
+  target 'netfox-Droar_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
