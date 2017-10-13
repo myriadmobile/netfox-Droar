@@ -37,10 +37,20 @@ class NFXDetailsController_iOS: NFXDetailsController, MFMailComposeViewControlle
     var requestButton: UIButton = UIButton()
     var responseButton: UIButton = UIButton()
 
+    private var copyAlert: UIAlertController?
+
     var infoView: UIScrollView = UIScrollView()
     var requestView: UIScrollView = UIScrollView()
     var responseView: UIScrollView = UIScrollView()
-        
+
+    private lazy var headerButtons: [UIButton] = {
+        return [self.infoButton, self.requestButton, self.responseButton]
+    }()
+
+    private lazy var infoViews: [UIScrollView] = {
+        return [self.infoView, self.requestView, self.responseView]
+    }()
+
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -48,27 +58,29 @@ class NFXDetailsController_iOS: NFXDetailsController, MFMailComposeViewControlle
         self.title = "Details"
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .action, target: self, action: #selector(NFXDetailsController_iOS.actionButtonPressed(_:)))
-        
+
+        // Header buttons
         self.infoButton = createHeaderButton("Info", x: 0, selector: #selector(NFXDetailsController_iOS.infoButtonPressed))
-        self.view.addSubview(self.infoButton)
-        
         self.requestButton = createHeaderButton("Request", x: self.infoButton.frame.maxX, selector: #selector(NFXDetailsController_iOS.requestButtonPressed))
-        self.view.addSubview(self.requestButton)
-        
         self.responseButton = createHeaderButton("Response", x: self.requestButton.frame.maxX, selector: #selector(NFXDetailsController_iOS.responseButtonPressed))
-        self.view.addSubview(self.responseButton)
-        
+        self.headerButtons.forEach { self.view.addSubview($0) }
+
+        // Info views
         self.infoView = createDetailsView(getInfoStringFromObject(self.selectedModel), forView: .info)
-        self.view.addSubview(self.infoView)
-        
         self.requestView = createDetailsView(getRequestStringFromObject(self.selectedModel), forView: .request)
-        self.view.addSubview(self.requestView)
-        
         self.responseView = createDetailsView(getResponseStringFromObject(self.selectedModel), forView: .response)
-        self.view.addSubview(self.responseView)
-        
+        self.infoViews.forEach { self.view.addSubview($0) }
+
+        // Swipe gestures
+        let lswgr = UISwipeGestureRecognizer(target: self, action: #selector(NFXDetailsController_iOS.handleSwipe(_:)))
+        lswgr.direction = UISwipeGestureRecognizerDirection.left
+        self.view.addGestureRecognizer(lswgr)
+
+        let rswgr = UISwipeGestureRecognizer(target: self, action: #selector(NFXDetailsController_iOS.handleSwipe(_:)))
+        rswgr.direction = UISwipeGestureRecognizerDirection.right
+        self.view.addGestureRecognizer(rswgr)
+
         infoButtonPressed()
-        
     }
     
     func createHeaderButton(_ title: String, x: CGFloat, selector: Selector) -> UIButton
@@ -84,6 +96,30 @@ class NFXDetailsController_iOS: NFXDetailsController, MFMailComposeViewControlle
         tempButton.titleLabel?.font = UIFont.NFXFont(size: 15)
         tempButton.addTarget(self, action: selector, for: .touchUpInside)
         return tempButton
+    }
+
+    @objc fileprivate func copyLabel(lpgr: UILongPressGestureRecognizer) {
+        guard let text = (lpgr.view as? UILabel)?.text,
+              copyAlert == nil else { return }
+
+        UIPasteboard.general.string = text
+
+        let alert = UIAlertController(title: "Text Copied!", message: nil, preferredStyle: .alert)
+        copyAlert = alert
+
+        self.present(alert, animated: true) { [weak self] in
+            guard let `self` = self else { return }
+
+            Timer.scheduledTimer(timeInterval: 0.45,
+                                 target: self,
+                                 selector: #selector(NFXDetailsController_iOS.dismissCopyAlert),
+                                 userInfo: nil,
+                                 repeats: false)
+        }
+    }
+
+    @objc fileprivate func dismissCopyAlert() {
+        copyAlert?.dismiss(animated: true) { [weak self] in self?.copyAlert = nil }
     }
     
     func createDetailsView(_ content: NSAttributedString, forView: EDetailsView) -> UIScrollView
@@ -103,7 +139,11 @@ class NFXDetailsController_iOS: NFXDetailsController, MFMailComposeViewControlle
         textLabel.numberOfLines = 0
         textLabel.attributedText = content
         textLabel.sizeToFit()
+        textLabel.isUserInteractionEnabled = true
         scrollView.addSubview(textLabel)
+
+        let lpgr = UILongPressGestureRecognizer(target: self, action: #selector(NFXDetailsController_iOS.copyLabel))
+        textLabel.addGestureRecognizer(lpgr)
         
         var moreButton: UIButton
         moreButton = UIButton.init(frame: CGRect(x: 20, y: textLabel.frame.maxY + 10, width: scrollView.frame.width - 40, height: 40))
@@ -113,89 +153,103 @@ class NFXDetailsController_iOS: NFXDetailsController, MFMailComposeViewControlle
             moreButton.setTitle("Show request body", for: UIControlState())
             moreButton.addTarget(self, action: #selector(NFXDetailsController_iOS.requestBodyButtonPressed), for: .touchUpInside)
             scrollView.addSubview(moreButton)
-            scrollView.contentSize = CGSize(width: textLabel.frame.width, height: moreButton.frame.maxY)
+            scrollView.contentSize = CGSize(width: textLabel.frame.width, height: moreButton.frame.maxY + 16)
 
         } else if ((forView == EDetailsView.response) && (self.selectedModel.responseBodyLength > 1024)) {
             moreButton.setTitle("Show response body", for: UIControlState())
             moreButton.addTarget(self, action: #selector(NFXDetailsController_iOS.responseBodyButtonPressed), for: .touchUpInside)
             scrollView.addSubview(moreButton)
-            scrollView.contentSize = CGSize(width: textLabel.frame.width, height: moreButton.frame.maxY)
+            scrollView.contentSize = CGSize(width: textLabel.frame.width, height: moreButton.frame.maxY + 16)
             
         } else {
-            scrollView.contentSize = CGSize(width: textLabel.frame.width, height: textLabel.frame.maxY)
+            scrollView.contentSize = CGSize(width: textLabel.frame.width, height: textLabel.frame.maxY + 16)
         }
         
         return scrollView
     }
     
-    func actionButtonPressed(_ sender: UIBarButtonItem)
+    @objc func actionButtonPressed(_ sender: UIBarButtonItem)
     {
-        let actionSheetController: UIAlertController = UIAlertController(title: "Share", message: "", preferredStyle: .actionSheet)
+        let actionSheetController: UIAlertController = UIAlertController(title: "Share", message: nil, preferredStyle: .actionSheet)
         
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
-        }
+        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel)
         actionSheetController.addAction(cancelAction)
         
-        let simpleLog: UIAlertAction = UIAlertAction(title: "Simple log", style: .default) { action -> Void in
+        let simpleLog: UIAlertAction = UIAlertAction(title: "Simple log", style: .default) { [unowned self] action -> Void in
             self.sendMailWithBodies(false)
         }
         actionSheetController.addAction(simpleLog)
         
-        let fullLogAction: UIAlertAction = UIAlertAction(title: "Full log", style: .default) { action -> Void in
+        let fullLogAction: UIAlertAction = UIAlertAction(title: "Full log", style: .default) { [unowned self] action -> Void in
             self.sendMailWithBodies(true)
         }
         actionSheetController.addAction(fullLogAction)
-        
+        actionSheetController.view.tintColor = UIColor.NFXOrangeColor()
+
         self.present(actionSheetController, animated: true, completion: nil)
     }
     
-    
-    func infoButtonPressed()
+    @objc func infoButtonPressed()
     {
         buttonPressed(self.infoButton)
     }
     
-    func requestButtonPressed()
+    @objc func requestButtonPressed()
     {
         buttonPressed(self.requestButton)
     }
     
-    func responseButtonPressed()
+    @objc func responseButtonPressed()
     {
         buttonPressed(self.responseButton)
     }
-    
-    func buttonPressed(_ button: UIButton)
-    {
-        self.infoButton.isSelected = false
-        self.requestButton.isSelected = false
-        self.responseButton.isSelected = false
-        
-        self.infoView.isHidden = true
-        self.requestView.isHidden = true
-        self.responseView.isHidden = true
-        
-        if button == self.infoButton {
-            self.infoButton.isSelected = true
-            self.infoView.isHidden = false
-            
-        } else if button == requestButton {
-            self.requestButton.isSelected = true
-            self.requestView.isHidden = false
-            
-        } else if button == responseButton {
-            self.responseButton.isSelected = true
-            self.responseView.isHidden = false
-            
+
+    @objc func handleSwipe(_ gesture: UISwipeGestureRecognizer) {
+        guard let currentButtonIdx = headerButtons.index(where: { $0.isSelected }) else { return }
+        let numButtons = headerButtons.count
+
+        switch gesture.direction {
+            case UISwipeGestureRecognizerDirection.left:
+                let nextIdx = currentButtonIdx + 1
+                buttonPressed(headerButtons[nextIdx > numButtons - 1 ? 0 : nextIdx])
+            case UISwipeGestureRecognizerDirection.right:
+                let previousIdx = currentButtonIdx - 1
+                buttonPressed(headerButtons[previousIdx < 0 ? numButtons - 1 : previousIdx])
+            default: break
         }
     }
     
-    func responseBodyButtonPressed()
+    func buttonPressed(_ sender: UIButton)
+    {
+        guard let selectedButtonIdx = self.headerButtons.index(of: sender) else { return }
+        let infoViews = [self.infoView, self.requestView, self.responseView]
+
+        UIView.animate(withDuration: 0.4,
+                       delay: 0.0,
+                       usingSpringWithDamping: 0.8,
+                       initialSpringVelocity: 0.7,
+                       options: .curveEaseInOut,
+                       animations: { [unowned self] in
+                            self.headerButtons.indices.forEach {
+                                let button = self.headerButtons[$0]
+                                let view = infoViews[$0]
+
+                                button.isSelected = button == sender
+                                view.frame = CGRect(x: CGFloat(-selectedButtonIdx + $0) * view.frame.size.width,
+                                                    y: view.frame.origin.y,
+                                                    width: view.frame.size.width,
+                                                    height: view.frame.size.height)
+                            }
+                       },
+                       completion: nil)
+    }
+    
+    @objc func responseBodyButtonPressed()
     {
         bodyButtonPressed().bodyType = NFXBodyType.response
     }
     
-    func requestBodyButtonPressed()
+    @objc func requestBodyButtonPressed()
     {
         bodyButtonPressed().bodyType = NFXBodyType.request
     }

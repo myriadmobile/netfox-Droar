@@ -59,6 +59,11 @@ open class NFX: NSObject
 
     @objc open func start()
     {
+        guard !self.started else {
+            showMessage("Alredy started!")
+            return
+        }
+
         self.started = true
         register()
         enable()
@@ -110,15 +115,10 @@ open class NFX: NSObject
         URLProtocol.unregisterClass(NFXProtocol.self)
     }
     
-    func motionDetected()
+    @objc func motionDetected()
     {
-        if self.started {
-            if self.presented {
-                hideNFX()
-            } else {
-                showNFX()
-            }
-        }
+        guard self.started else { return }
+        toggleNFX()
     }
     
     @objc open func setGesture(_ gesture: ENFXGesture)
@@ -135,20 +135,20 @@ open class NFX: NSObject
     
     @objc open func show()
     {
-        if (self.started) && (self.selectedGesture == .custom) {
-            showNFX()
-        } else {
-            print("netfox \(nfxVersion) - [ERROR]: Please call start() and setGesture(.custom) first")
-        }
+        guard self.started else { return }
+        showNFX()
     }
     
     @objc open func hide()
     {
-        if (self.started) && (self.selectedGesture == .custom) {
-            hideNFX()
-        } else {
-            print("netfox \(nfxVersion) - [ERROR]: Please call start() and setGesture(.custom) first")
-        }
+        guard self.started else { return }
+        hideNFX()
+    }
+
+    @objc open func toggle()
+    {
+        guard self.started else { return }
+        toggleNFX()
     }
     
     @objc open func ignoreURL(_ url: String)
@@ -183,6 +183,11 @@ open class NFX: NSObject
             self.presented = false
             self.lastVisitDate = Date()
         }
+    }
+
+    fileprivate func toggleNFX()
+    {
+        self.presented ? hideNFX() : showNFX()
     }
     
     internal func clearOldData()
@@ -241,7 +246,7 @@ extension NFX {
         navigationController!.navigationBar.isTranslucent = false
         navigationController!.navigationBar.tintColor = UIColor.NFXOrangeColor()
         navigationController!.navigationBar.barTintColor = UIColor.NFXStarkWhiteColor()
-        navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName : UIColor.NFXOrangeColor()]
+        navigationController!.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor : UIColor.NFXOrangeColor()]
         
         presentingViewController?.present(navigationController!, animated: true, completion: nil)
     }
@@ -275,7 +280,7 @@ extension NFX {
         self.nfxMenuItem.target = self
         self.nfxMenuItem.action = #selector(NFX.motionDetected)
         self.nfxMenuItem.keyEquivalent = "n"
-        self.nfxMenuItem.keyEquivalentModifierMask = NSEventModifierFlags(rawValue: UInt(Int(NSEventModifierFlags.command.rawValue | NSEventModifierFlags.shift.rawValue)))
+        self.nfxMenuItem.keyEquivalentModifierMask = NSEvent.ModifierFlags(rawValue: UInt(Int(NSEvent.ModifierFlags.command.rawValue | NSEvent.ModifierFlags.shift.rawValue)))
     }
     
     public func addNetfoxToMainMenu() {
@@ -293,7 +298,7 @@ extension NFX {
     
     public func showNFXFollowingPlatform()  {
         if self.windowController == nil {
-            self.windowController = NFXWindowController(windowNibName: "NetfoxWindow")
+            self.windowController = NFXWindowController(windowNibName: NSNib.Name(rawValue: "NetfoxWindow"))
         }
         self.windowController?.showWindow(nil)
     }

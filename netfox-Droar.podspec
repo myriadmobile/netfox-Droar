@@ -32,9 +32,9 @@ This adds an activation for Netfox straight in Droar.
 
   s.source_files = 'netfox-Droar/Classes/**/*'
   
-  # s.resource_bundles = {
-  #   'netfox-Droar' => ['netfox-Droar/Assets/*.png']
-  # }
+  s.resource_bundles = {
+    'netfox-Droar' => ['netfox-Droar/Classes/**/*.{xib,png,jpeg,jpg,txt}']
+  }
 
   # s.public_header_files = 'Pod/Classes/**/*.h'
   s.frameworks = 'UIKit', 'MapKit'

@@ -19,6 +19,11 @@
     "ios": "10.0"
   },
   "source_files": "netfox-Droar/Classes/**/*",
+  "resource_bundles": {
+    "netfox-Droar": [
+      "netfox-Droar/Classes/**/*.{xib,png,jpeg,jpg,txt}"
+    ]
+  },
   "frameworks": [
     "UIKit",
     "MapKit"
