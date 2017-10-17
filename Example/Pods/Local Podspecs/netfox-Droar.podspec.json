@@ -1,6 +1,6 @@
 {
   "name": "netfox-Droar",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "summary": "A Droar plugin for Netfox",
   "description": "This adds an activation for Netfox straight in Droar.",
   "homepage": "https://github.com/Janglinator/netfox-Droar",
@@ -13,17 +13,12 @@
   },
   "source": {
     "git": "https://github.com/Janglinator/netfox-Droar.git",
-    "tag": "1.0.0"
+    "tag": "1.0.2"
   },
   "platforms": {
-    "ios": "10.0"
+    "ios": "9.0"
   },
   "source_files": "netfox-Droar/Classes/**/*",
-  "resource_bundles": {
-    "netfox-Droar": [
-      "netfox-Droar/Classes/**/*.{xib,png,jpeg,jpg,txt}"
-    ]
-  },
   "frameworks": [
     "UIKit",
     "MapKit"

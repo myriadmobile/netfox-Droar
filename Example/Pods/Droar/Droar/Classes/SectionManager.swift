@@ -8,31 +8,56 @@
 
 import Foundation
 
-class SectionManager {
+public enum BasicSourceType: Int {
+    case buildInfo, deviceInfo, reporting
+    static let defaultValues: [BasicSourceType] = [.buildInfo, .deviceInfo, .reporting]
+}
+
+internal class SectionManager {
     
     static let sharedInstance = SectionManager()
+    private var basicSources = [IDroarSource]()
+    private var staticSources = [IDroarSource]()
+    private var dynamicSources = [IDroarSource]()
     public private(set) var sources = [IDroarSource]()
     
     private init() {
-        sources.append(BuildInfoSource())
-        sources.append(DeviceInfoSource())
+        registerBasicSources(BasicSourceType.defaultValues)
+    }
+    
+    public func registerBasicSources(_ sources: [BasicSourceType]) {
+        basicSources = [IDroarSource]()
+        
+        for type in sources {
+            switch type {
+            case .buildInfo: basicSources.append(BuildInfoSource()); break;
+            case .deviceInfo: basicSources.append(DeviceInfoSource()); break;
+            case .reporting: basicSources.append(ReportingSource()); break;
+            }
+        }
+        
         sortSources()
     }
     
-    public func registerSource(source: IDroarSource) {
-        if (!sources.contains(where: { (existingSource) -> Bool in
-            return existingSource.droarSectionTitle() == source.droarSectionTitle()
+    public func registerStaticSource(_ source: IDroarSource) {
+        if (!staticSources.contains(where: { (existingSource) -> Bool in
+            return existingSource === source
         })) {
-            cacheSources(newSource: source)
+            staticSources.append(source)
+            sortSources()
         }
     }
     
-    private func cacheSources(newSource: IDroarSource) {
-        sources.append(newSource)
+    public func registerDynamicSources(_ sources: [IDroarSource]) {
+        self.dynamicSources = sources
         sortSources()
     }
     
     private func sortSources() {
+        sources = dynamicSources
+        sources.append(contentsOf: staticSources)
+        sources.append(contentsOf: basicSources)
+        
         sources.sort { (source1, source2) -> Bool in
             let position1 = source1.droarSectionPosition()
             let position2 = source2.droarSectionPosition()
@@ -46,11 +71,11 @@ class SectionManager {
         }
     }
     
-    public func initializeSections(tableView: UITableView) {
-        for section in sources {
-            if let performSetupAction = section.droarSectionPerformSetup {
-                performSetupAction(tableView)
-            }
-        }
-    }
+    //    public func initializeSections(tableView: UITableView) {
+    //        for section in sources {
+    //            if let performSetupAction = section.droarSectionPerformSetup {
+    //                performSetupAction(tableView)
+    //            }
+    //        }
+    //    }
 }
