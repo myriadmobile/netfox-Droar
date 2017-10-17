@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Droar
 import netfox_Droar
 
 @UIApplicationMain
@@ -16,6 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        netfox_Droar.start()
         return true
     }
 

@@ -34,14 +34,12 @@ import netfox
     private static let sharedInstance = netfox_Droar()
     private static let dispatchOnce = DispatchOnce()
     
-    @objc internal static func start() {
+    @objc public static func start() {
         dispatchOnce.perform {
-            // We need to let the application load first
-            DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-                NFX.sharedInstance().start()
-                NFX.sharedInstance().setGesture(NFX.ENFXGesture.custom)
-                Droar.register(source: sharedInstance)
-            })
+            NFX.sharedInstance().start()
+            NFX.sharedInstance().setGesture(NFX.ENFXGesture.custom)
+            Droar.start()
+            Droar.register(source: sharedInstance)
         }
     }
 }
