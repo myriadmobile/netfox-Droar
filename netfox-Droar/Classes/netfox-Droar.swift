@@ -9,37 +9,38 @@ import Foundation
 import Droar
 import netfox
 
-@objc public class netfox_Droar : NSObject, IDroarSource {
+@objc public class netfox_Droar : NSObject, DroarKnob {
+    
+    @objc private static let sharedInstance = netfox_Droar()
+    private let dispatchOnce = DispatchOnce()
+    
+    override private init() {}
+    
+    public func droarSectionWillBeginLoading(tableView: UITableView?) {
+        dispatchOnce.perform {
+            NFX.sharedInstance().start()
+            NFX.sharedInstance().setGesture(NFX.ENFXGesture.custom)
+        }
+    }
+    
     public func droarSectionTitle() -> String {
-        return "Sample Cells"
+        return "Netfox"
     }
     
     public func droarSectionPosition() -> PositionInfo {
-        return PositionInfo(position: .top, priority: .high)
+        return PositionInfo(position: .top, priority: .medium)
     }
     
     public func droarSectionNumberOfCells() -> Int {
         return 1
     }
     
-    public func droarSectionCellForIndex(index: Int, tableView: UITableView) -> UITableViewCell {
+    public func droarSectionCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
         return DroarLabelCell.create(title: "Launch Netfox", detail: "", allowSelection: true)
     }
     
     public func droarSectionIndexSelected(tableView: UITableView, selectedIndex: Int) {
         Droar.toggleVisibility()
         NFX.sharedInstance().show()
-    }
-    
-    private static let sharedInstance = netfox_Droar()
-    private static let dispatchOnce = DispatchOnce()
-    
-    @objc public static func start() {
-        dispatchOnce.perform {
-            NFX.sharedInstance().start()
-            NFX.sharedInstance().setGesture(NFX.ENFXGesture.custom)
-            Droar.start()
-            Droar.register(source: sharedInstance)
-        }
     }
 }

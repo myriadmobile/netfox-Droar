@@ -1,5 +1,5 @@
 //
-//  BuildInfoSource.swift
+//  BuildInfoKnob.swift
 //  Droar
 //
 //  Created by Nathan Jangula on 10/11/17.
@@ -7,7 +7,7 @@
 
 import Foundation
 
-internal class BuildInfoSource : IDroarSource {
+internal class BuildInfoKnob : DroarKnob {
     
     private enum BuildInfoRow: Int {
         case name = 0
@@ -36,8 +36,9 @@ internal class BuildInfoSource : IDroarSource {
         return BuildInfoRow.count.rawValue
     }
     
-    func droarSectionCellForIndex(index: Int, tableView: UITableView) -> UITableViewCell {
+    func droarSectionCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DroarLabelCell") as? DroarLabelCell ?? DroarLabelCell.create()
+        cell.isUserInteractionEnabled = false
         
         let info = Bundle.main.infoDictionary
         

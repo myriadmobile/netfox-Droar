@@ -1,6 +1,6 @@
 //
-//  DeviceInfoSource.swift
-//  AFNetworking
+//  DeviceInfoKnob.swift
+//  Droar
 //
 //  Created by Nathan Jangula on 10/11/17.
 //
@@ -8,7 +8,7 @@
 import Foundation
 import SDVersion
 
-internal class DeviceInfoSource : IDroarSource {
+internal class DeviceInfoKnob : DroarKnob {
     private enum DeviceInfoRow: Int {
         case name = 0
         case systemName = 1
@@ -31,9 +31,10 @@ internal class DeviceInfoSource : IDroarSource {
         return DeviceInfoRow.count.rawValue
     }
     
-    func droarSectionCellForIndex(index: Int, tableView: UITableView) -> UITableViewCell {
+    func droarSectionCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DroarLabelCell") as? DroarLabelCell ?? DroarLabelCell.create()
-        
+        cell.isUserInteractionEnabled = false
+
         let device = UIDevice.current
         
         switch DeviceInfoRow(rawValue:index)! {

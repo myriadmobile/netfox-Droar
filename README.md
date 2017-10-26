@@ -5,11 +5,7 @@
 [![License](https://img.shields.io/cocoapods/l/netfox-Droar.svg?style=flat)](http://cocoapods.org/pods/netfox-Droar)
 [![Platform](https://img.shields.io/cocoapods/p/netfox-Droar.svg?style=flat)](http://cocoapods.org/pods/netfox-Droar)
 
-## Example
-
-To run the example project, clone the repo, and run `pod install` from the Example directory first.
-
-## Requirements
+This is a plugin for [Droar](https://github.com/myriadmobile/Droar)
 
 ## Installation
 
@@ -19,6 +15,8 @@ it, simply add the following line to your Podfile:
 ```ruby
 pod 'netfox-Droar'
 ```
+
+That's it!  No code necessary.  It will fire up Netfox as soon as you start Droar.  Note that you still have to start Droar yourself!
 
 ## Author
 
