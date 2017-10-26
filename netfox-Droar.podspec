@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
 This adds an activation for Netfox straight in Droar.
                        DESC
 
-  s.homepage         = 'https://github.com/Janglinator/netfox-Droar'
+  s.homepage         = 'https://github.com/myriadmoble/netfox-Droar'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
-  s.author           = { 'Janglinator' => 'njangula@myriadmobile.com' }
-  s.source           = { :git => 'https://github.com/Janglinator/netfox-Droar.git', :tag => s.version.to_s }
+  s.author           = { 'Myriad Mobile' => 'developers@myriadmobile.com' }
+  s.source           = { :git => 'https://github.com/myriadmoble/netfox-Droar.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'

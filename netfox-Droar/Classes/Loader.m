@@ -12,7 +12,11 @@
 @implementation Loader
 
 + (void)load {
-    [Droar register:[netfox_Droar performSelector:@selector(sharedInstance)]];
+    SEL selector = NSSelectorFromString(@"sharedInstance");
+    if ([netfox_Droar respondsToSelector:selector])
+    {
+        [Droar register:[netfox_Droar performSelector:selector]];
+    }
 }
 
 @end

@@ -1,6 +1,6 @@
 # netfox-Droar
 
-[![CI Status](http://img.shields.io/travis/Janglinator/netfox-Droar.svg?style=flat)](https://travis-ci.org/Janglinator/netfox-Droar)
+[![CI Status](http://img.shields.io/travis/myriadmobile/netfox-Droar.svg?style=flat)](https://travis-ci.org/myriadmobile/netfox-Droar)
 [![Version](https://img.shields.io/cocoapods/v/netfox-Droar.svg?style=flat)](http://cocoapods.org/pods/netfox-Droar)
 [![License](https://img.shields.io/cocoapods/l/netfox-Droar.svg?style=flat)](http://cocoapods.org/pods/netfox-Droar)
 [![Platform](https://img.shields.io/cocoapods/p/netfox-Droar.svg?style=flat)](http://cocoapods.org/pods/netfox-Droar)
@@ -20,7 +20,7 @@ That's it!  No code necessary.  It will fire up Netfox as soon as you start Droa
 
 ## Author
 
-Janglinator, njangula@myriadmobile.com
+Myriad Mobile, developers@myriadmobile.com
 
 ## License
 
