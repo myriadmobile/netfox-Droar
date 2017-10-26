@@ -16,7 +16,7 @@ it, simply add the following line to your Podfile:
 pod 'netfox-Droar'
 ```
 
-That's it!  No code necessary.  It will fire up Netfox as soon as you start Droar.  Note that you still have to start Droar yourself!
+That's it!  No code necessary.  It will fire up Netfox as soon as you start [Droar](https://github.com/myriadmobile/Droar).  Note that you still have to start [Droar](https://github.com/myriadmobile/Droar) yourself!
 
 ## Author
 
