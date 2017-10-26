@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'netfox-Droar'
-  s.version          = '1.1.1'
+  s.version          = '1.1.2'
   s.summary          = 'A Droar plugin for Netfox'
 
 # This description is used to generate tags and improve search results.
@@ -21,11 +21,11 @@ Pod::Spec.new do |s|
 This adds an activation for Netfox straight in Droar.
                        DESC
 
-  s.homepage         = 'https://github.com/myriadmoble/netfox-Droar'
+  s.homepage         = 'https://github.com/myriadmobile/netfox-Droar'
   # s.screenshots     = 'www.example.com/screenshots_1', 'www.example.com/screenshots_2'
   s.license          = { :type => 'MIT', :file => 'LICENSE' }
   s.author           = { 'Myriad Mobile' => 'developers@myriadmobile.com' }
-  s.source           = { :git => 'https://github.com/myriadmoble/netfox-Droar.git', :tag => s.version.to_s }
+  s.source           = { :git => 'https://github.com/myriadmobile/netfox-Droar.git', :tag => s.version.to_s }
   # s.social_media_url = 'https://twitter.com/<TWITTER_USERNAME>'
 
   s.ios.deployment_target = '9.0'
