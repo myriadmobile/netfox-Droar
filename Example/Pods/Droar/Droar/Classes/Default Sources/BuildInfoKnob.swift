@@ -24,22 +24,22 @@ internal class BuildInfoKnob : DroarKnob {
         case count = 10
     }
     
-    func droarSectionTitle() -> String {
+    func droarKnobTitle() -> String {
         return "Build Info"
     }
     
-    func droarSectionPosition() -> PositionInfo {
+    func droarKnobPosition() -> PositionInfo {
         return PositionInfo(position: .bottom, priority: .low)
     }
     
-    func droarSectionNumberOfCells() -> Int {
+    func droarKnobNumberOfCells() -> Int {
         return BuildInfoRow.count.rawValue
     }
     
-    func droarSectionCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
+    func droarKnobCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "DroarLabelCell") as? DroarLabelCell ?? DroarLabelCell.create()
-        cell.isUserInteractionEnabled = false
-        
+        cell.selectionStyle = .none
+
         let info = Bundle.main.infoDictionary
         
         switch BuildInfoRow(rawValue:index)! {

@@ -1,8 +1,8 @@
 PODS:
-  - Droar (1.2.2):
+  - Droar (1.2.3):
     - SDVersion
   - netfox (1.10.5)
-  - netfox-Droar (1.0.4):
+  - netfox-Droar (1.1.2):
     - Droar
     - netfox
   - SDVersion (4.3.1)
@@ -17,9 +17,9 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  Droar: cb10f856708d9ed28851148a5e527d02fb1a32cb
+  Droar: 08bb508e38fb4598eaee32954c348c1dd461f1f7
   netfox: 597a3436073889c24d0af3a2aac9d73db779ae3a
-  netfox-Droar: e94e864a3e2d4dc0c6e62ae07a7be489547f099c
+  netfox-Droar: dd72b33453f5867403a3859c93642f7520c4435b
   SDVersion: f89668d817ccfee16a57fc279030635bd2ad8fae
 
 PODFILE CHECKSUM: 3a5b9acfc1c617a33eddd5fd8d1c67555465bd35

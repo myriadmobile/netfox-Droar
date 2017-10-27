@@ -34,13 +34,17 @@ To configure the gesture recognizer, use the `setGestureReconizer` method of `Dr
 There are 3 different ways configure the "knobs" (table sections) shown:
 
 ### Registering default knobs:
-This can be done using the `registerDefaultKnobs` method of `Droar`.  If this isn't called, all default sections will be displayed.
+This can be done using the `registerDefaultKnobs` method of `Droar`.  If this isn't called, all default knobs will be displayed.
     
 ### Registering a static knob:
 Static knobs will always be shown in Droar.  They can be added using the `register` method of `Droar`.
 
 ### Dynamic view controller knobs:
 When Droar is opened, it will search through the application's view controller heirarchy to find the currently active view controller(s), and pull knob info if the view controller conforms to `DroarKnob`.  This is useful for a per-screen customization of Droar.
+
+## Plugins
+
+[netfox-Droar](https://github.com/myriadmobile/netfox-Droar)
 
 ## Author
 

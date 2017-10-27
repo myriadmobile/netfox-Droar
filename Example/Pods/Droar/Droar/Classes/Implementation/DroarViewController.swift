@@ -31,30 +31,35 @@ class DroarViewController: UITableViewController {
         navigationController?.navigationBar.barStyle = UIBarStyle.blackOpaque
         navigationController?.navigationBar.barTintColor = UIColor.droarBlue
         navigationController?.navigationBar.tintColor = UIColor.white
+        
+        let keyboardDismissal = UITapGestureRecognizer(target: view, action: #selector(view.endEditing(_:)))
+        view.addGestureRecognizer(keyboardDismissal)
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return SectionManager.sharedInstance.visibleKnobs.count
+        return KnobManager.sharedInstance.visibleKnobs.count
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return SectionManager.sharedInstance.visibleKnobs[section].droarSectionNumberOfCells()
+        return KnobManager.sharedInstance.visibleKnobs[section].droarKnobNumberOfCells()
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return SectionManager.sharedInstance.visibleKnobs[indexPath.section].droarSectionCellForIndex(index: indexPath.row, tableView: tableView) as! UITableViewCell
+        return KnobManager.sharedInstance.visibleKnobs[indexPath.section].droarKnobCellForIndex(index: indexPath.row, tableView: tableView) as! UITableViewCell
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if let indexSelectedAction = SectionManager.sharedInstance.visibleKnobs[indexPath.section].droarSectionIndexSelected {
+        tableView.deselectRow(at: indexPath, animated: true)
+        if let cell = tableView.cellForRow(at: indexPath) {
+            guard cell.selectionStyle != .none else { return }
+        }
+        if let indexSelectedAction = KnobManager.sharedInstance.visibleKnobs[indexPath.section].droarKnobIndexSelected {
             indexSelectedAction(tableView, indexPath.row)
         }
-        
-        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return SectionManager.sharedInstance.visibleKnobs[section].droarSectionTitle()
+        return KnobManager.sharedInstance.visibleKnobs[section].droarKnobTitle()
     }
     
     override func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int)

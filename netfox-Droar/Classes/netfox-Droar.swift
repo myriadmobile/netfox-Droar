@@ -16,30 +16,30 @@ import netfox
     
     override private init() {}
     
-    public func droarSectionWillBeginLoading(tableView: UITableView?) {
+    public func droarKnobWillBeginLoading(tableView: UITableView?) {
         dispatchOnce.perform {
             NFX.sharedInstance().start()
             NFX.sharedInstance().setGesture(NFX.ENFXGesture.custom)
         }
     }
     
-    public func droarSectionTitle() -> String {
+    public func droarKnobTitle() -> String {
         return "Netfox"
     }
     
-    public func droarSectionPosition() -> PositionInfo {
+    public func droarKnobPosition() -> PositionInfo {
         return PositionInfo(position: .top, priority: .medium)
     }
     
-    public func droarSectionNumberOfCells() -> Int {
+    public func droarKnobNumberOfCells() -> Int {
         return 1
     }
     
-    public func droarSectionCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
+    public func droarKnobCellForIndex(index: Int, tableView: UITableView) -> DroarCell {
         return DroarLabelCell.create(title: "Launch Netfox", detail: "", allowSelection: true)
     }
     
-    public func droarSectionIndexSelected(tableView: UITableView, selectedIndex: Int) {
+    public func droarKnobIndexSelected(tableView: UITableView, selectedIndex: Int) {
         Droar.toggleVisibility()
         NFX.sharedInstance().show()
     }
