@@ -14,3 +14,6 @@ script:
 - set -o pipefail && xcodebuild -workspace Example/netfox-Droar.xcworkspace -scheme netfox-Droar-Example -sdk iphonesimulator11.0 ONLY_ACTIVE_ARCH=NO SWIFT_VERSION=4.0 | xcpretty
 - set -o pipefail && xcodebuild -workspace Example/netfox-Droar.xcworkspace -scheme netfox-Droar-Example -sdk iphonesimulator11.0 ONLY_ACTIVE_ARCH=NO SWIFT_VERSION=3.2 | xcpretty
 - pod lib lint
+notifications:
+  slack:
+    secure: WdCgV5AM9ZS61WRFh9BHisrP8PgegrhRwMrrRGy7l/dSVjPYqvl1AnRo9nce+OkT+M4G8n2BRNeAecFt0+qgWSrE2/uGT28cYEXWueKsp8BA9U7903uamJhSJSvrwbCtYlKK0pnyktWR21PLcCYn0liI/0AXzwfMQKqlPZXPxcqfvezoOAgt4aK0QfMcGIQHEdh/ZHUCEwsBqdVPTj+luxibokcgKeUvW4fFKEZGNaCfYq1gRd0SFQQVilgOsZbRi0B/IF+SKpbbVVBm/LyfCLfh07Tfy6Dm/NFIrg2D+ZUI1uZRpbL27yY147pUXPXTTJQaD+LFhb65mGBIcePjttAOQAnDZ1VlT6j1+UJF9z62aMI4k3hgySChZkjp/GL4NAsjZSX6O9lCso+DLXL3fMOzofROt9H7VEACYf0Ic0XrPIQyEI+2LeW0iOZhyGjw9U/BMEWic2ADiEWAleS9jHVMCy4/Abmy28JC71iCXWDcWXaUjQWo0PAnexmpV1FW+l9l0a5LO2l4TUNC60fiJnp4ZNv+FKkb6lqIrErh7+zZPhb91hst3NrDpIxw8BNWgGvJFmBePmB2PD7aXwGEIha+wOQYRykNPIGZdTui61dO67dfZiSh1SDwy7b4j4U2wUn6gldf9GPj6N9SJ5UQYa7+DLwI8u4PmTN/NkwAj6Y=
