@@ -7,6 +7,8 @@ language: swift
 cache: cocoapods
 podfile: Example/Podfile
 before_install:
+rvm: 1.9.3
+
 - gem install cocoapods # Since Travis is not always on latest version
 - pod install --project-directory=Example
 script:
