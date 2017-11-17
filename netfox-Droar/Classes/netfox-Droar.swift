@@ -40,7 +40,7 @@ import netfox
     }
     
     public func droarKnobIndexSelected(tableView: UITableView, selectedIndex: Int) {
-        Droar.toggleVisibility()
+        Droar.dismissWindow()
         NFX.sharedInstance().show()
     }
 }
