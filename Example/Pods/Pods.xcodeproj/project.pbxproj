@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		015A09CAF25C4E517FAFECCB7C5B2074 /* DroarKnob.swift in Sources */ = {isa = PBXBuildFile; fileRef = E1A7DF216AC99E551FBCD5721B89C9DF /* DroarKnob.swift */; };
 		044A4E4CDD6D4586C901B478E60DF489 /* KnobManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6276A1056702E848FACB8519C39C4136 /* KnobManager.swift */; };
-		053082BE5B9F975FA291C2B625204503 /* netfox-DroarLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB0908560064B701ACFF9C40AEF41EB /* netfox-DroarLoader.m */; };
+		053082BE5B9F975FA291C2B625204503 /* netfox_DroarLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FB0908560064B701ACFF9C40AEF41EB /* netfox_DroarLoader.m */; };
 		09C124ED74DA100140C3045650DB9460 /* SDVersion-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = F3EE7C6EFC299A6F92ED374B9A8B319A /* SDVersion-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		0FD519362D5DD36FFD22EFEA23CB161C /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C3446E7B8609FDEDC357A4776679E450 /* Foundation.framework */; };
 		10B114049D26338A1E1018F4CA1D3C41 /* NFX.swift in Sources */ = {isa = PBXBuildFile; fileRef = 376A92C5434950034DE473578CBA6C7A /* NFX.swift */; };
@@ -21,7 +21,7 @@
 		24D7AFA6842FE1FBF2A49DC94289DFCA /* Swizzling.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E31095AE07A69002D20604E54E329A /* Swizzling.swift */; };
 		25812D5B8B0077312168F04217F5A91E /* DroarSegmentedCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 623A195CF5B0AD29E9386C5974081946 /* DroarSegmentedCell.swift */; };
 		25B42275171A14F40FA5C859CAC38EAE /* netfox-Droar-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 636596E19CADED37735CD5EC038C89D2 /* netfox-Droar-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		29387C9891B3B4E37D0AF2EB4F555805 /* netfox-DroarLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 65733A9F99500BA3E8EFA35B68E0AD8D /* netfox-DroarLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		29387C9891B3B4E37D0AF2EB4F555805 /* netfox_DroarLoader.h in Headers */ = {isa = PBXBuildFile; fileRef = 65733A9F99500BA3E8EFA35B68E0AD8D /* netfox_DroarLoader.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		2A222C6C8650ABE38F0A4FAA4547393E /* netfox-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 1770BEAF51F740C30B8A1E2E783BB174 /* netfox-dummy.m */; };
 		2E70A66AB30EFE672CED10F42EBC9F97 /* BundleExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 381A43BA265A7869C516C5711DD724A1 /* BundleExtensions.swift */; };
 		2F8F988406EA9070C594A63BE817DE0A /* Droar-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 2BADF3057767559BD9A5D87275FE464B /* Droar-dummy.m */; };
@@ -188,7 +188,7 @@
 		3A56585A5F27DCAA03ACE90BE688AD41 /* Pods-netfox-Droar_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-netfox-Droar_Example.release.xcconfig"; sourceTree = "<group>"; };
 		3B8217D2F69BDF77E198DAC2F976E649 /* DroarTextFieldCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DroarTextFieldCell.swift; path = Droar/Classes/Cells/DroarTextFieldCell.swift; sourceTree = "<group>"; };
 		3C2A5417EC21829BD13B256FB39A296E /* DroarImageCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DroarImageCell.swift; path = Droar/Classes/Cells/DroarImageCell.swift; sourceTree = "<group>"; };
-		3FB0908560064B701ACFF9C40AEF41EB /* netfox-DroarLoader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "netfox-DroarLoader.m"; path = "netfox-Droar/Classes/netfox-DroarLoader.m"; sourceTree = "<group>"; };
+		3FB0908560064B701ACFF9C40AEF41EB /* netfox_DroarLoader.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = netfox_DroarLoader.m; path = "netfox-Droar/Classes/netfox_DroarLoader.m"; sourceTree = "<group>"; };
 		42CB66841ED751D38EDFD0436C5FC0B1 /* NFXHelper_iOS.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NFXHelper_iOS.swift; path = netfox/iOS/NFXHelper_iOS.swift; sourceTree = "<group>"; };
 		4602C879954101F1861891E3E61D3D33 /* NFXHelper.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NFXHelper.swift; path = netfox/Core/NFXHelper.swift; sourceTree = "<group>"; };
 		461395D35835905706F4077BC760E246 /* Droar.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Droar.modulemap; sourceTree = "<group>"; };
@@ -207,7 +207,7 @@
 		623A195CF5B0AD29E9386C5974081946 /* DroarSegmentedCell.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = DroarSegmentedCell.swift; path = Droar/Classes/Cells/DroarSegmentedCell.swift; sourceTree = "<group>"; };
 		6276A1056702E848FACB8519C39C4136 /* KnobManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = KnobManager.swift; path = Droar/Classes/Helpers/KnobManager.swift; sourceTree = "<group>"; };
 		636596E19CADED37735CD5EC038C89D2 /* netfox-Droar-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "netfox-Droar-umbrella.h"; sourceTree = "<group>"; };
-		65733A9F99500BA3E8EFA35B68E0AD8D /* netfox-DroarLoader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "netfox-DroarLoader.h"; path = "netfox-Droar/Classes/netfox-DroarLoader.h"; sourceTree = "<group>"; };
+		65733A9F99500BA3E8EFA35B68E0AD8D /* netfox_DroarLoader.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = netfox_DroarLoader.h; path = "netfox-Droar/Classes/netfox_DroarLoader.h"; sourceTree = "<group>"; };
 		6759E0BFA9FB6689A6DD73178FFEF22C /* NFXGenericController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NFXGenericController.swift; path = netfox/Core/NFXGenericController.swift; sourceTree = "<group>"; };
 		6F040563C11332729C2F24E0F68A7B4F /* Pods-netfox-Droar_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-netfox-Droar_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		7377D68D3CF3F218F864AE51D02E5249 /* SDVersion.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SDVersion.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -394,8 +394,8 @@
 		58F916ADBD3783123D893CB76270BEA6 /* netfox-Droar */ = {
 			isa = PBXGroup;
 			children = (
-				65733A9F99500BA3E8EFA35B68E0AD8D /* netfox-DroarLoader.h */,
-				3FB0908560064B701ACFF9C40AEF41EB /* netfox-DroarLoader.m */,
+				65733A9F99500BA3E8EFA35B68E0AD8D /* netfox_DroarLoader.h */,
+				3FB0908560064B701ACFF9C40AEF41EB /* netfox_DroarLoader.m */,
 				BB6A2AE36B0150A2B22D4AA1EE2B65DB /* netfox-Droar.swift */,
 				21C06ECF0DFAF6FE9A75C395565D80BC /* Support Files */,
 			);
@@ -633,7 +633,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				29387C9891B3B4E37D0AF2EB4F555805 /* netfox-DroarLoader.h in Headers */,
+				29387C9891B3B4E37D0AF2EB4F555805 /* netfox_DroarLoader.h in Headers */,
 				25B42275171A14F40FA5C859CAC38EAE /* netfox-Droar-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -814,7 +814,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				053082BE5B9F975FA291C2B625204503 /* netfox-DroarLoader.m in Sources */,
+				053082BE5B9F975FA291C2B625204503 /* netfox_DroarLoader.m in Sources */,
 				B7E140715F1FF28674B01A51B0DCB2FF /* netfox-Droar-dummy.m in Sources */,
 				EAA828DBD7428C1F5975760805E02EA7 /* netfox-Droar.swift in Sources */,
 			);

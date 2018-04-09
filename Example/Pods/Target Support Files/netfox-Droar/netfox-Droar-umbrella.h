@@ -10,7 +10,7 @@
 #endif
 #endif
 
-#import "Loader.h"
+#import "netfox_DroarLoader.h"
 
 FOUNDATION_EXPORT double netfox_DroarVersionNumber;
 FOUNDATION_EXPORT const unsigned char netfox_DroarVersionString[];
