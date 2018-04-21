@@ -38,7 +38,7 @@ open class NFX: NSObject
     }
     
     // the sharedInstance class method can be reached from ObjC
-    open class func sharedInstance() -> NFX
+    @objc open class func sharedInstance() -> NFX
     {
         return NFX.swiftSharedInstance
     }
@@ -56,6 +56,7 @@ open class NFX: NSObject
     fileprivate var ignoredURLs = [String]()
     fileprivate var filters = [Bool]()
     fileprivate var lastVisitDate: Date = Date()
+    internal var cacheStoragePolicy = URLCache.StoragePolicy.notAllowed
 
     @objc open func start()
     {
@@ -121,6 +122,10 @@ open class NFX: NSObject
         toggleNFX()
     }
     
+    @objc open func setCachePolicy(_ policy: URLCache.StoragePolicy) {
+        cacheStoragePolicy = policy
+    }
+    
     @objc open func setGesture(_ gesture: ENFXGesture)
     {
         self.selectedGesture = gesture
@@ -178,7 +183,7 @@ open class NFX: NSObject
             return
         }
         
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "NFXDeactivateSearch"), object: nil)
+        NotificationCenter.default.post(name: Notification.Name.NFXDeactivateSearch, object: nil)
         self.hideNFXFollowingPlatform { () -> Void in
             self.presented = false
             self.lastVisitDate = Date()
@@ -233,18 +238,6 @@ open class NFX: NSObject
 
 #if os(iOS)
 
-#if !swift(>=4.0)
-extension NSAttributedStringKey {
-    public class var foregroundColor: String {
-        return NSForegroundColorAttributeName
-    }
-
-    public class var font: String {
-        return NSFontAttributeName
-    }
-}
-#endif
-
 extension NFX {
     fileprivate var presentingViewController: UIViewController?
     {
@@ -263,7 +256,11 @@ extension NFX {
         navigationController!.navigationBar.isTranslucent = false
         navigationController!.navigationBar.tintColor = UIColor.NFXOrangeColor()
         navigationController!.navigationBar.barTintColor = UIColor.NFXStarkWhiteColor()
-        navigationController!.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.NFXOrangeColor()]
+        #if !swift(>=4.0)
+            navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.NFXOrangeColor()]
+        #else
+            navigationController!.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.NFXOrangeColor()]
+        #endif
         
         presentingViewController?.present(navigationController!, animated: true, completion: nil)
     }
@@ -308,7 +305,11 @@ extension NFX {
     
     public func showNFXFollowingPlatform()  {
         if self.windowController == nil {
-            self.windowController = NFXWindowController(windowNibName: NSNib.Name(rawValue: "NetfoxWindow"))
+            #if !swift(>=4.0)
+                self.windowController = NFXWindowController(windowNibName: "NetfoxWindow")
+            #else
+                self.windowController = NFXWindowController(windowNibName: NSNib.Name(rawValue: "NetfoxWindow"))
+            #endif
         }
         self.windowController?.showWindow(nil)
     }

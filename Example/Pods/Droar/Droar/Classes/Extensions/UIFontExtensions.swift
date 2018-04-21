@@ -9,8 +9,8 @@ import Foundation
 
 extension String: Error {}
 
-public extension UIFont {
-    public static func register(url: URL) throws {
+internal extension UIFont {
+    static func register(url: URL) throws {
         guard let fontDataProvider = CGDataProvider(url: url as CFURL) else {
             throw "Could not create font data provider for \(url)."
         }

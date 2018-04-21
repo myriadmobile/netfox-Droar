@@ -29,7 +29,7 @@ internal extension Droar {
     }
     
     @objc private static func handleTripleTap(sender: UITapGestureRecognizer?) {
-        toggleVisibility()
+        toggleVisibility(nil)
     }
     
     @objc private static func handlePan(sender: UIPanGestureRecognizer?) {
@@ -43,13 +43,19 @@ internal extension Droar {
                 guard beginDroarVisibilityUpdate() else { sender.isEnabled = false; break }
                 
             case .changed:
-                navController.view.transform = CGAffineTransform(translationX: max(sender.translation(in: sender.view).x, -navController.view.frame.width), y: 0)
+                let limitedPan = max(sender.translation(in: sender.view).x, -navController.view.frame.width)
+                navController.view.transform = CGAffineTransform(translationX: limitedPan, y: 0)
+                setContainerOpacity(abs(limitedPan) / drawerWidth)
                 
             default:
                 sender.isEnabled = true
-                endDroarVisibilityUpdate()
+                endDroarVisibilityUpdate(nil)
             }
         }
+    }
+    
+    private static func setContainerOpacity(_ opacity: CGFloat) {
+        containerViewController.view.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: defaultContainerAlpha * opacity)
     }
     
     static func replaceGestureRecognizer(with recognizer: UIGestureRecognizer)
@@ -70,31 +76,36 @@ internal extension Droar {
         KnobManager.sharedInstance.registerDynamicKnobs(loadDynamicKnobs())
         KnobManager.sharedInstance.prepareForDisplay(tableView: viewController?.tableView)
         
-        navController.view.frame = CGRect(x: UIScreen.main.bounds.size.width, y: 0, width: drawerWidth, height: UIScreen.main.bounds.size.height)
-        navController.willMove(toParentViewController: activeVC)
-        activeVC.addChildViewController(navController)
-        activeVC.view.addSubview(navController.view)
-        navController.didMove(toParentViewController: activeVC)
+        let screenSize = UIScreen.main.bounds.size
+        
+        containerViewController.view.frame = CGRect(x: 0, y: 0, width: screenSize.width, height: screenSize.height)
+        navController.view.frame = CGRect(x: screenSize.width, y: 0, width: drawerWidth, height: screenSize.height)
+        containerViewController.willMove(toParentViewController: activeVC)
+        activeVC.addChildViewController(containerViewController)
+        activeVC.view.addSubview(containerViewController.view)
+        containerViewController.didMove(toParentViewController: activeVC)
         
         viewController?.tableView.reloadData()
         
         return true
     }
     
-    static func endDroarVisibilityUpdate() {
+    static func endDroarVisibilityUpdate(_ completion: (()->Void)?) {
         let translation = abs(navController.view.transform.tx)
         
         UIView.animate(withDuration: 0.25, animations: {
             if translation >= (navController.view.frame.size.width / 2) {
                 navController.view.transform = CGAffineTransform(translationX: -navController.view.frame.size.width, y: 0)
+                setContainerOpacity(1)
             } else {
                 navController.view.transform = CGAffineTransform.identity
+                setContainerOpacity(0)
             }
         }, completion: { (complete) in
             if navController.view.transform.isIdentity {
-                navController.willMove(toParentViewController: nil)
-                navController.view.removeFromSuperview()
-                navController.removeFromParentViewController()
+                containerViewController.willMove(toParentViewController: nil)
+                containerViewController.view.removeFromSuperview()
+                containerViewController.removeFromParentViewController()
                 
                 if let window = dismissalRecognizer.view {
                     window.removeGestureRecognizer(dismissalRecognizer)
@@ -107,20 +118,24 @@ internal extension Droar {
                     window.addGestureRecognizer(dismissalRecognizer)
                 }
             }
+            
+            completion?()
         })
     }
     
-    @objc static func toggleVisibility() {
+    @objc static func toggleVisibility(_ completion: (()->Void)?) {
         guard beginDroarVisibilityUpdate() else { return }
         
         UIView.animate(withDuration: 0.25, animations: {
             if navController.view.transform.isIdentity {
                 navController.view.transform = CGAffineTransform(translationX: -navController.view.frame.size.width, y: 0)
+                setContainerOpacity(1)
             } else {
                 navController.view.transform = CGAffineTransform.identity
+                setContainerOpacity(0)
             }
         }) { (completed) in
-            endDroarVisibilityUpdate()
+            endDroarVisibilityUpdate(completion)
         }
     }
     

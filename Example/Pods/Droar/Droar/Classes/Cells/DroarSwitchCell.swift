@@ -19,6 +19,7 @@ public class DroarSwitchCell : UITableViewCell, DroarCell {
         for view in Bundle.podBundle.loadNibNamed("DroarSwitchCell", owner: self, options: nil) ?? [Any]() {
             if view is DroarSwitchCell {
                 cell = view as? DroarSwitchCell
+                break
             }
         }
         
@@ -33,6 +34,13 @@ public class DroarSwitchCell : UITableViewCell, DroarCell {
     @IBAction func handleSwitchChanged(_ sender: Any) {
         guard let onValueChanged = onValueChanged else { return }
         onValueChanged(toggleSwitch.isOn)
+    }
+    
+    public func setEnabled(_ enabled: Bool) {
+        titleLabel.isEnabled = enabled
+        toggleSwitch.isEnabled = enabled
+        backgroundColor = enabled ? UIColor.white : UIColor.disabledGray
+        isUserInteractionEnabled = enabled
     }
     
     public func stateDump() -> [String : String]? {

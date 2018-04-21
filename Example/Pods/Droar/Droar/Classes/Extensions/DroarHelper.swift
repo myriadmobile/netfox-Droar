@@ -9,12 +9,23 @@ import Foundation
 
 internal extension Droar {
     static func initializeWindow() {
+        let size = UIScreen.main.bounds.size
+        containerViewController = UIViewController()
+        containerViewController.view.frame = CGRect(x: 0, y: 0, width: size.width, height: size.height)
+        containerViewController.view.backgroundColor = UIColor.clear
+        containerViewController.view.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        
         viewController = DroarViewController(style: .grouped)
         
         navController = UINavigationController(rootViewController: viewController!)
-        navController.view.frame = CGRect(x: UIScreen.main.bounds.size.width, y: 0, width: drawerWidth, height: UIScreen.main.bounds.size.height)
+        navController.view.frame = CGRect(x: size.width, y: 0, width: drawerWidth, height: size.height)
         navController.view.autoresizingMask = [.flexibleHeight, .flexibleLeftMargin]
         navController.navigationBar.isTranslucent = false
+        
+        navController.willMove(toParentViewController: viewController)
+        containerViewController.addChildViewController(navController)
+        containerViewController.view.addSubview(navController.view)
+        navController.didMove(toParentViewController: containerViewController)
         
         let separatorView = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: navController.view.frame.size.height))
         separatorView.backgroundColor = UIColor.droarBlue
@@ -31,8 +42,14 @@ internal extension Droar {
             }
         }
         
-        dismissalRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(toggleVisibility))
+        dismissalRecognizer = UISwipeGestureRecognizer(target: self, action: #selector(dismissWindow))
         dismissalRecognizer.direction = .right
+    }
+    
+    @objc private static func dismissWindow() {
+        if Droar.isVisible {
+            toggleVisibility(nil)
+        }
     }
     
     static func loadDynamicKnobs() -> [DroarKnob] {
@@ -84,6 +101,8 @@ internal extension Droar {
                     if subview.subviews.count > 0 {
                         let subSubView = subview.subviews.first
                         responder = subSubView?.next
+                    } else {
+                        continue
                     }
                 }
                 
@@ -105,8 +124,8 @@ internal extension Droar {
     }
     
     static func captureScreen() -> UIImage? {
-        let parent = navController.view.superview
-        navController.view.removeFromSuperview()
+        let parent = containerViewController.view.superview
+        containerViewController.view.removeFromSuperview()
         
         guard let window = loadKeyWindow() else { return .none }
         UIGraphicsBeginImageContextWithOptions(window.bounds.size, false, UIScreen.main.scale)
@@ -115,7 +134,7 @@ internal extension Droar {
         let image = UIGraphicsGetImageFromCurrentImageContext()
         UIGraphicsEndImageContext()
         
-        parent?.addSubview(navController.view)
+        parent?.addSubview(containerViewController.view)
         
         return image
     }

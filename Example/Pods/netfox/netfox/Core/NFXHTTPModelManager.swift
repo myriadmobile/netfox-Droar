@@ -13,15 +13,22 @@ final class NFXHTTPModelManager: NSObject
 {
     static let sharedInstance = NFXHTTPModelManager()
     fileprivate var models = [NFXHTTPModel]()
+    private let syncQueue = DispatchQueue(label: "NFXSyncQueue")
     
     func add(_ obj: NFXHTTPModel)
     {
-        self.models.insert(obj, at: 0)
+        syncQueue.async {
+            self.models.insert(obj, at: 0)
+            NotificationCenter.default.post(name: NSNotification.Name.NFXAddedModel, object: obj)
+        }
     }
     
     func clear()
     {
-        self.models.removeAll()
+        syncQueue.async {
+            self.models.removeAll()
+            NotificationCenter.default.post(name: NSNotification.Name.NFXClearedModels, object: nil)
+        }
     }
     
     func getModels() -> [NFXHTTPModel]

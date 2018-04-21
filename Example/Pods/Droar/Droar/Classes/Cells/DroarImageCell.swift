@@ -8,7 +8,6 @@
 import Foundation
 
 public class DroarImageCell : UITableViewCell, DroarCell {
-    
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var largeImageView: UIImageView!
     
@@ -18,6 +17,7 @@ public class DroarImageCell : UITableViewCell, DroarCell {
         for view in Bundle.podBundle.loadNibNamed("DroarImageCell", owner: self, options: nil) ?? [Any]() {
             if view is DroarImageCell {
                 cell = view as? DroarImageCell
+                break
             }
         }
         
@@ -28,8 +28,13 @@ public class DroarImageCell : UITableViewCell, DroarCell {
         return cell ?? DroarImageCell()
     }
     
+    public func setEnabled(_ enabled: Bool) {
+        titleLabel.isEnabled = enabled
+        backgroundColor = enabled ? UIColor.white : UIColor.disabledGray
+        isUserInteractionEnabled = enabled
+    }
+    
     public func stateDump() -> [String : String]? {
-        // TODO: Do we care to know what image was being displayed?  I wrote this mainly to show the Myriad Logo
         return nil
     }
 }

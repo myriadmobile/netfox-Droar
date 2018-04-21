@@ -19,6 +19,7 @@ public class DroarTextFieldCell : UITableViewCell, DroarCell {
         for view in Bundle.podBundle.loadNibNamed("DroarTextFieldCell", owner: self, options: nil) ?? [Any]() {
             if view is DroarTextFieldCell {
                 cell = view as? DroarTextFieldCell
+                break
             }
         }
         
@@ -34,6 +35,13 @@ public class DroarTextFieldCell : UITableViewCell, DroarCell {
     @IBAction func handleTextChanged(_ sender: Any) {
         guard let onTextChanged = onTextChanged else { return }
         onTextChanged(textField.text)
+    }
+    
+    public func setEnabled(_ enabled: Bool) {
+        titleLabel.isEnabled = enabled
+        textField.isEnabled = enabled
+        backgroundColor = enabled ? UIColor.white : UIColor.disabledGray
+        isUserInteractionEnabled = enabled
     }
     
     public func stateDump() -> [String : String]? {

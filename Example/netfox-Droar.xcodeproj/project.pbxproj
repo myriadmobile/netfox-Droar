@@ -17,7 +17,7 @@
 
 /* Begin PBXFileReference section */
 		02DC0FACB03B3A2189D42295 /* Pods-netfox-Droar_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-netfox-Droar_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-netfox-Droar_Tests/Pods-netfox-Droar_Tests.debug.xcconfig"; sourceTree = "<group>"; };
-		03C69FD0752925E9AE70F2AE /* netfox-Droar.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "netfox-Droar.podspec"; path = "../netfox-Droar.podspec"; sourceTree = "<group>"; };
+		03C69FD0752925E9AE70F2AE /* netfox-Droar.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = "netfox-Droar.podspec"; path = "../netfox-Droar.podspec"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		1BB250BA6FE1721908C6C25E /* Pods_netfox_Droar_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_netfox_Droar_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1BD3E82D06AAEEF627CC9A54 /* Pods_netfox_Droar_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_netfox_Droar_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		22359D1341A908A444CA8EA6 /* Pods-netfox-Droar_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-netfox-Droar_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-netfox-Droar_Example/Pods-netfox-Droar_Example.release.xcconfig"; sourceTree = "<group>"; };

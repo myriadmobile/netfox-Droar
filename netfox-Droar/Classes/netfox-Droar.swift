@@ -16,7 +16,7 @@ import netfox
     
     override private init() {}
     
-    public func droarKnobWillBeginLoading(tableView: UITableView?) {
+    public func droarKnobDidFinishRegistering() {
         dispatchOnce.perform {
             NFX.sharedInstance().start()
             NFX.sharedInstance().setGesture(NFX.ENFXGesture.custom)

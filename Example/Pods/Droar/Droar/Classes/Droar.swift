@@ -19,16 +19,21 @@ import Foundation
     
     internal static var gestureRecognizer: UIGestureRecognizer!
     internal static var dismissalRecognizer: UISwipeGestureRecognizer!
+    internal static var containerViewController: UIViewController!
+    internal static let defaultContainerAlpha: CGFloat = 0.5
     internal static var navController: UINavigationController!
     internal static var viewController: DroarViewController?
-    internal static let drawerWidth:CGFloat = 250
+    internal static let drawerWidth:CGFloat = 300
     private static let startOnce = DispatchOnce()
+    public static private(set) var isStarted = false;
     
     @objc public static func start()
     {
         startOnce.perform {
             initializeWindow()
             setGestureType(.panFromRight)
+            KnobManager.sharedInstance.prepareForStart()
+            Droar.isStarted = true
         }
     }
         
@@ -47,7 +52,7 @@ import Foundation
         viewController?.tableView.reloadData()
     }
     
-    @objc public static func setGestureType(_ type: DroarGestureType, _ threshold: CGFloat = 30.0) {
+    @objc public static func setGestureType(_ type: DroarGestureType, _ threshold: CGFloat = 50.0) {
         configureRecognizerForType(type, threshold)
     }
     
@@ -58,17 +63,17 @@ import Foundation
     
     @objc public static var isVisible: Bool {
         get {
-            return navController.parent != nil
+            return containerViewController.parent != nil
         }
     }
     
-    @objc public static func showWindow() {
+    @objc public static func showWindow(completion: (()->Void)? = nil) {
         guard !isVisible else { return }
-        toggleVisibility()
+        toggleVisibility(completion)
     }
 
-    @objc public static func dismissWindow() {
+    @objc public static func dismissWindow(completion: (()->Void)? = nil) {
         guard isVisible else { return }
-        toggleVisibility()
+        toggleVisibility(completion)
     }
 }

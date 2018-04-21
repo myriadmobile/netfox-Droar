@@ -19,6 +19,7 @@ public class DroarSegmentedCell : UITableViewCell, DroarCell {
         for view in Bundle.podBundle.loadNibNamed("DroarSegmentedCell", owner: self, options: nil) ?? [Any]() {
             if view is DroarSegmentedCell {
                 cell = view as? DroarSegmentedCell
+                break
             }
         }
         
@@ -42,6 +43,13 @@ public class DroarSegmentedCell : UITableViewCell, DroarCell {
     @IBAction func handleValueChanged(_ sender: Any) {
         guard let onValueChanged = onValueChanged else { return }
         onValueChanged(segmentedControl.selectedSegmentIndex)
+    }
+    
+    public func setEnabled(_ enabled: Bool) {
+        titleLabel.isEnabled = enabled
+        segmentedControl.isEnabled = enabled
+        backgroundColor = enabled ? UIColor.white : UIColor.disabledGray
+        isUserInteractionEnabled = enabled
     }
     
     public func stateDump() -> [String : String]? {
