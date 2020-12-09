@@ -12,7 +12,13 @@ import Cocoa
 import UIKit
 #endif
 
-let nfxVersion = "1.8"
+private func podPlistVersion() -> String? {
+    guard let path = Bundle(identifier: "com.kasketis.netfox-iOS")?.infoDictionary?["CFBundleShortVersionString"] as? String else { return nil }
+    return path
+}
+
+// TODO: Carthage support
+let nfxVersion = podPlistVersion() ?? "0"
 
 // Notifications posted when NFX opens/closes, for client application that wish to log that information.
 let nfxWillOpenNotification = "NFXWillOpenNotification"
@@ -120,6 +126,10 @@ open class NFX: NSObject
     {
         guard self.started else { return }
         toggleNFX()
+    }
+    
+    @objc open func isStarted() -> Bool {
+        return self.started
     }
     
     @objc open func setCachePolicy(_ policy: URLCache.StoragePolicy) {
@@ -239,30 +249,27 @@ open class NFX: NSObject
 #if os(iOS)
 
 extension NFX {
-    fileprivate var presentingViewController: UIViewController?
-    {
-        let rootViewController = UIApplication.shared.keyWindow?.rootViewController
-        return rootViewController?.presentedViewController ?? rootViewController
+    fileprivate var presentingViewController: UIViewController? {
+        var rootViewController = UIApplication.shared.keyWindow?.rootViewController
+		while let controller = rootViewController?.presentedViewController {
+			rootViewController = controller
+		}
+        return rootViewController
     }
 
     fileprivate func showNFXFollowingPlatform()
     {
-        var navigationController: UINavigationController?
-        
-        var listController: NFXListController_iOS
-        listController = NFXListController_iOS()
-        
-        navigationController = UINavigationController(rootViewController: listController)
-        navigationController!.navigationBar.isTranslucent = false
-        navigationController!.navigationBar.tintColor = UIColor.NFXOrangeColor()
-        navigationController!.navigationBar.barTintColor = UIColor.NFXStarkWhiteColor()
-        #if !swift(>=4.0)
-            navigationController!.navigationBar.titleTextAttributes = [NSForegroundColorAttributeName: UIColor.NFXOrangeColor()]
-        #else
-            navigationController!.navigationBar.titleTextAttributes = [NSAttributedStringKey.foregroundColor: UIColor.NFXOrangeColor()]
-        #endif
-        
-        presentingViewController?.present(navigationController!, animated: true, completion: nil)
+        let navigationController = UINavigationController(rootViewController: NFXListController_iOS())
+        navigationController.navigationBar.isTranslucent = false
+        navigationController.navigationBar.tintColor = UIColor.NFXOrangeColor()
+        navigationController.navigationBar.barTintColor = UIColor.NFXStarkWhiteColor()
+        navigationController.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.NFXOrangeColor()]
+
+        if #available(iOS 13.0, *) {
+            navigationController.presentationController?.delegate = self
+        }
+
+        presentingViewController?.present(navigationController, animated: true, completion: nil)
     }
     
     fileprivate func hideNFXFollowingPlatform(_ completion: (() -> Void)?)
@@ -272,6 +279,15 @@ extension NFX {
                 notNilCompletion()
             }
         })
+    }
+}
+
+extension NFX: UIAdaptivePresentationControllerDelegate {
+
+    public func presentationControllerDidDismiss(_ presentationController: UIPresentationController)
+    {
+        guard self.started else { return }
+        self.presented = false
     }
 }
 
@@ -305,11 +321,13 @@ extension NFX {
     
     public func showNFXFollowingPlatform()  {
         if self.windowController == nil {
-            #if !swift(>=4.0)
-                self.windowController = NFXWindowController(windowNibName: "NetfoxWindow")
+            #if swift(>=4.2)
+            let nibName = "NetfoxWindow"
             #else
-                self.windowController = NFXWindowController(windowNibName: NSNib.Name(rawValue: "NetfoxWindow"))
+            let nibName = NSNib.Name(rawValue: "NetfoxWindow")
             #endif
+
+            self.windowController = NFXWindowController(windowNibName: nibName)
         }
         self.windowController?.showWindow(nil)
     }
@@ -321,7 +339,6 @@ extension NFX {
             notNilCompletion()
         }
     }
-    
 }
     
 #endif

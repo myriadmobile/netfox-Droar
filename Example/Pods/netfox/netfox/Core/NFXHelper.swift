@@ -132,6 +132,14 @@ extension URLRequest
         }
     }
     
+    func getNFXURLComponents() -> URLComponents?
+    {
+        guard let url = self.url else {
+            return nil
+        }
+        return URLComponents(string: url.absoluteString)
+    }
+    
     func getNFXMethod() -> String
     {
         if (httpMethod != nil) {
@@ -150,6 +158,7 @@ extension URLRequest
         case .returnCacheDataElseLoad: return "ReturnCacheDataElseLoad"
         case .returnCacheDataDontLoad: return "ReturnCacheDataDontLoad"
         case .reloadRevalidatingCacheData: return "ReloadRevalidatingCacheData"
+        @unknown default: return "Unknown \(cachePolicy)"
         }
         
     }
@@ -171,6 +180,27 @@ extension URLRequest
     func getNFXBody() -> Data
     {
         return httpBodyStream?.readfully() ?? URLProtocol.property(forKey: "NFXBodyData", in: self) as? Data ?? Data()
+    }
+    
+    func getCurl() -> String {
+        guard let url = url else { return "" }
+        let baseCommand = "curl \(url.absoluteString)"
+        
+        var command = [baseCommand]
+        
+        if let method = httpMethod {
+            command.append("-X \(method)")
+        }
+        
+        for (key, value) in getNFXHeaders() {
+            command.append("-H \u{22}\(key): \(value)\u{22}")
+        }
+        
+        if let body = String(data: getNFXBody(), encoding: .utf8) {
+            command.append("-d \u{22}\(body)\u{22}")
+        }
+        
+        return command.joined(separator: " ")
     }
 }
 
@@ -332,7 +362,7 @@ class NFXDebugInfo
                 completion("-")
             }
             
-            }) .resume()
+        }) .resume()
     }
     
 }
@@ -378,9 +408,10 @@ extension String
         // This ensures NFXProtocol won't be added twice
         swizzleProtocolSetter()
         
-        // Now, let's make sure NFXProtocol is always included in the default configuration(s)
+        // Now, let's make sure NFXProtocol is always included in the default and ephemeral configuration(s)
         // Adding it twice won't be an issue anymore, because we've de-duped the setter
         swizzleDefault()
+        swizzleEphemeral()
     }
     
     private static func swizzleProtocolSetter() {
@@ -397,7 +428,7 @@ extension String
         method_exchangeImplementations(origMethod, newMethod)
     }
     
-    private var protocolClasses_Swizzled: [AnyClass]? {
+    @objc private var protocolClasses_Swizzled: [AnyClass]? {
         get {
             // Unused, but required for compiler
             return self.protocolClasses_Swizzled
@@ -432,9 +463,32 @@ extension String
         method_exchangeImplementations(origMethod, newMethod)
     }
     
-    private class var default_swizzled: URLSessionConfiguration {
+    private static func swizzleEphemeral() {
+        let aClass: AnyClass = object_getClass(self)!
+        
+        let origSelector = #selector(getter: URLSessionConfiguration.ephemeral)
+        let newSelector = #selector(getter: URLSessionConfiguration.ephemeral_swizzled)
+        
+        let origMethod = class_getClassMethod(aClass, origSelector)!
+        let newMethod = class_getClassMethod(aClass, newSelector)!
+        
+        method_exchangeImplementations(origMethod, newMethod)
+    }
+    
+    @objc private class var default_swizzled: URLSessionConfiguration {
         get {
             let config = URLSessionConfiguration.default_swizzled
+            
+            // Let's go ahead and add in NFXProtocol, since it's safe to do so.
+            config.protocolClasses?.insert(NFXProtocol.self, at: 0)
+            
+            return config
+        }
+    }
+    
+    @objc private class var ephemeral_swizzled: URLSessionConfiguration {
+        get {
+            let config = URLSessionConfiguration.ephemeral_swizzled
             
             // Let's go ahead and add in NFXProtocol, since it's safe to do so.
             config.protocolClasses?.insert(NFXProtocol.self, at: 0)
@@ -447,6 +501,6 @@ extension String
 public extension NSNotification.Name {
     static let NFXDeactivateSearch = Notification.Name("NFXDeactivateSearch")
     static let NFXReloadData = Notification.Name("NFXReloadData")
-    public static let NFXAddedModel = Notification.Name("NFXAddedModel")
-    public static let NFXClearedModels = Notification.Name("NFXClearedModels")
+    static let NFXAddedModel = Notification.Name("NFXAddedModel")
+    static let NFXClearedModels = Notification.Name("NFXClearedModels")
 }

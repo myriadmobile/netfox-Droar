@@ -10,9 +10,7 @@
 import Foundation
 import UIKit
 
-
-@available(iOS 8.0, *)
-class NFXListController_iOS: NFXListController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchControllerDelegate
+class NFXListController_iOS: NFXListController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, UISearchControllerDelegate, DataCleaner
 {
     // MARK: Properties
     
@@ -25,8 +23,8 @@ class NFXListController_iOS: NFXListController, UITableViewDelegate, UITableView
     {
         super.viewDidLoad()
         
-        self.edgesForExtendedLayout = UIRectEdge()
-        self.extendedLayoutIncludesOpaqueBars = false
+        self.edgesForExtendedLayout = UIRectEdge.all
+        self.extendedLayoutIncludesOpaqueBars = true
         self.automaticallyAdjustsScrollViewInsets = false
         
         self.tableView.frame = self.view.frame
@@ -40,8 +38,14 @@ class NFXListController_iOS: NFXListController, UITableViewDelegate, UITableView
 
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage.NFXClose(), style: .plain, target: self, action: #selector(NFXListController_iOS.closeButtonPressed))
 
-        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage.NFXSettings(), style: .plain, target: self, action: #selector(NFXListController_iOS.settingsButtonPressed))
-        
+        let rightButtons = [
+            UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(NFXListController_iOS.trashButtonPressed)),
+            UIBarButtonItem(image: UIImage.NFXSettings(), style: .plain, target: self, action: #selector(NFXListController_iOS.settingsButtonPressed))
+        ]
+
+        self.navigationItem.rightBarButtonItems = rightButtons
+
+
         self.searchController = UISearchController(searchResultsController: nil)
         self.searchController.searchResultsUpdater = self
         self.searchController.delegate = self
@@ -56,6 +60,7 @@ class NFXListController_iOS: NFXListController, UITableViewDelegate, UITableView
         
         if #available(iOS 11.0, *) {
             self.navigationItem.searchController = self.searchController
+            self.definesPresentationContext = true
         } else {
             let searchView = UIView()
             searchView.frame = CGRect(x: 0, y: 0, width: self.view.frame.width - 60, height: 0)
@@ -87,12 +92,20 @@ class NFXListController_iOS: NFXListController, UITableViewDelegate, UITableView
         super.viewWillAppear(animated)
         reloadTableViewData()
     }
-    
+
     @objc func settingsButtonPressed()
     {
         var settingsController: NFXSettingsController_iOS
         settingsController = NFXSettingsController_iOS()
         self.navigationController?.pushViewController(settingsController, animated: true)
+    }
+
+    @objc func trashButtonPressed()
+    {
+        self.clearData(sourceView: tableView, originingIn: nil) {
+
+            self.reloadTableViewData()
+        }
     }
 
     @objc func closeButtonPressed()

@@ -21,6 +21,8 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
 @objc public class NFXHTTPModel: NSObject
 {
     @objc public var requestURL: String?
+    @objc public var requestURLComponents: URLComponents?
+    @objc public var requestURLQueryItems: [URLQueryItem]?
     @objc public var requestMethod: String?
     @objc public var requestCachePolicy: String?
     @objc public var requestDate: Date?
@@ -29,7 +31,8 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     @objc public var requestHeaders: [AnyHashable: Any]?
     public var requestBodyLength: Int?
     @objc public var requestType: String?
-    
+    @objc public var requestCurl: String?
+
     public var responseStatus: Int?
     @objc public var responseType: String?
     @objc public var responseDate: Date?
@@ -45,19 +48,31 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
     
     @objc public var noResponse: Bool = true
     
+    
+    
     func saveRequest(_ request: URLRequest)
     {
         self.requestDate = Date()
         self.requestTime = getTimeFromDate(self.requestDate!)
         self.requestURL = request.getNFXURL()
+        self.requestURLComponents = request.getNFXURLComponents()
+        self.requestURLQueryItems = request.getNFXURLComponents()?.queryItems
         self.requestMethod = request.getNFXMethod()
         self.requestCachePolicy = request.getNFXCachePolicy()
         self.requestTimeout = request.getNFXTimeout()
         self.requestHeaders = request.getNFXHeaders()
         self.requestType = requestHeaders?["Content-Type"] as! String?
+        self.requestCurl = request.getCurl()
+    }
+    
+    func saveRequestBody(_ request: URLRequest)
+    {
         saveRequestBodyData(request.getNFXBody())
+    }
+    
+    func logRequest(_ request: URLRequest)
+    {
         formattedRequestLogEntry().appendToFile(filePath: NFXPath.SessionLog)
-
     }
     
     func saveErrorResponse()
@@ -333,5 +348,4 @@ fileprivate func < <T : Comparable>(lhs: T?, rhs: T?) -> Bool {
         
         return log;
     }
-
 }

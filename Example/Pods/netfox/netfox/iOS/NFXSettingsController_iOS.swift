@@ -10,7 +10,7 @@
 import UIKit
 import MessageUI
 
-class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate {
+class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UITableViewDataSource, MFMailComposeViewControllerDelegate, DataCleaner {
     
     var tableView: UITableView = UITableView()
     
@@ -57,13 +57,11 @@ class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UIT
         nfxURLButton = UIButton(frame: CGRect(x: 10, y: self.view.frame.height - 40, width: self.view.frame.width - 2*10, height: 30))
         nfxURLButton.autoresizingMask = [.flexibleTopMargin, .flexibleWidth]
         nfxURLButton.titleLabel?.font = UIFont.NFXFont(size: 12)
-        nfxURLButton.setTitleColor(UIColor.NFXGray44Color(), for: UIControlState())
+        nfxURLButton.setTitleColor(UIColor.NFXGray44Color(), for: .init())
         nfxURLButton.titleLabel?.textAlignment = .center
-        nfxURLButton.setTitle(nfxURL, for: UIControlState())
+        nfxURLButton.setTitle(nfxURL, for: .init())
         nfxURLButton.addTarget(self, action: #selector(NFXSettingsController_iOS.nfxURLButtonPressed), for: .touchUpInside)
         self.view.addSubview(nfxURLButton)
-        
-        
     }
     
     override func viewWillDisappear(_ animated: Bool)
@@ -212,7 +210,6 @@ class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UIT
         }
         
         tableView.deselectRow(at: indexPath, animated: true)
-        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat
@@ -262,7 +259,6 @@ class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UIT
                 cell!.accessoryType = .none
             }
         }
-        
     }
     
     @objc func nfxEnabledSwitchValueChanged(_ sender: UISwitch)
@@ -276,24 +272,8 @@ class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UIT
     
     func clearDataButtonPressedOnTableIndex(_ index: IndexPath)
     {
-        let actionSheetController: UIAlertController = UIAlertController(title: "Clear data?", message: "", preferredStyle: .actionSheet)
-        actionSheetController.popoverPresentationController?.sourceView = tableView
-        actionSheetController.popoverPresentationController?.sourceRect = tableView.rectForRow(at: index)
-        
-        let cancelAction: UIAlertAction = UIAlertAction(title: "Cancel", style: .cancel) { action -> Void in
-        }
-        actionSheetController.addAction(cancelAction)
-        
-        let yesAction: UIAlertAction = UIAlertAction(title: "Yes", style: .default) { action -> Void in
-            NFX.sharedInstance().clearOldData()
-        }
-        actionSheetController.addAction(yesAction)
-        
-        let noAction: UIAlertAction = UIAlertAction(title: "No", style: .default) { action -> Void in
-        }
-        actionSheetController.addAction(noAction)
-        
-        self.present(actionSheetController, animated: true, completion: nil)
+
+        clearData(sourceView: tableView, originingIn: tableView.rectForRow(at: index)) { }
     }
 
     func shareSessionLogsPressed()
@@ -315,7 +295,6 @@ class NFXSettingsController_iOS: NFXSettingsController, UITableViewDelegate, UIT
     {
         self.dismiss(animated: true, completion: nil)
     }
-    
 }
 
 #endif
